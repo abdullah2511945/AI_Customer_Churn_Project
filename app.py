@@ -1,4 +1,3 @@
-import shap
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -61,17 +60,20 @@ if st.button("Predict Churn"):
     st.progress(float(probability))
 
 
-if prediction is not None and st.checkbox("Show Prediction Explanation"):
+if prediction is not None and st.checkbox("Show Explanation"):
 
-    explainer = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(input_data)
+    st.subheader("🔍 Top Factors Influencing Prediction")
 
-    st.subheader("🔍 SHAP Explanation")
+    importance = model.feature_importances_
+    features = model.feature_names_in_
 
-    fig, ax = plt.subplots()
-    shap.summary_plot(shap_values, input_data, plot_type="bar", show=False)
-    st.pyplot(fig)
+    importance_df = pd.DataFrame({
+        "Feature": features,
+        "Importance": importance
+    }).sort_values(by="Importance", ascending=False).head(10)
 
+    st.bar_chart(importance_df.set_index("Feature"))
+    
 
 st.header("📈 Feature Importance")
 
