@@ -22,3 +22,15 @@ def plot_roc_curve(model, X_test, y_test):
     plt.legend()
 
     plt.show()
+
+def plot_model_performance(results_df):
+
+    results_df.set_index("Model").plot(kind="bar")
+
+    plt.title("Model Performance Comparison")
+    plt.ylabel("Score")
+
+    plt.xticks(rotation=0)
+    plt.legend()
+
+    plt.show()
